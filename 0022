@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chic Edit | Fashion Styling Tips</title>
+    <meta name="description" content="Chic Edit shares fashion styling tips, outfit formulas, and wardrobe inspiration.">
+</head>
+<body>
+
+    <header>
+        <h1>Chic Edit</h1>
+        <p>Fashion Styling Tips & Outfit Inspiration</p>
+    </header>
+
+    <main>
+
+        <h2>White Shirt Outfit Formula</h2>
+
+        <p>
+            White Shirt + Straight Jeans + Loafers = Timeless Style
+        </p>
+
+        <h3>Why It Works</h3>
+
+        <ul>
+            <li>Clean and versatile</li>
+            <li>Suitable for casual and smart-casual occasions</li>
+            <li>Easy to accessorize</li>
+        </ul>
+
+        <button id="download-guide">
+            Download Style Guide
+        </button>
+
+        <p>
+            <a href="#contact">Contact Us</a>
+        </p>
+
+    </main>
+
+    <footer id="contact">
+        <h3>Contact</h3>
+        <p>Email: hello@chicedit.com</p>
+    </footer>
+
+</body>
+</html>
