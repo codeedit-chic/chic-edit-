@@ -1,87 +1,384 @@
 <!DOCTYPE html>
 <html lang="en">
-<<style>
-body {
-    font-family: Arial, sans-serif;
-    max-width: 900px;
-    margin: auto;
-    padding: 20px;
-    background-color: #f8f6f2;
-}
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Chic Edit | Fashion Styling Tips</title>
 
-h1 {
-    color: #2c2c2c;
-    text-align: center;
-}
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-ML3442VZ');</script>
+  <!-- End Google Tag Manager -->
 
-button {
-    background: black;
-    color: white;
-    padding: 12px 20px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-}
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
 
-button:hover {
-    opacity: 0.8;
-}
-</style>>
-    <!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-ML3442VZ');</script>
-<!-- End Google Tag Manager -->
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chic Edit | Fashion Styling Tips</title>
-    <meta name="description" content="Chic Edit shares fashion styling tips, outfit formulas, and wardrobe inspiration.">
+  <style>
+    :root {
+      --cream:    #f8f4ef;
+      --blush:    #e8c9b8;
+      --mocha:    #7a5c4e;
+      --charcoal: #2c2c2c;
+      --sage:     #8a9e8c;
+      --white:    #ffffff;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--cream);
+      color: var(--charcoal);
+    }
+
+    /* NAV */
+    nav {
+      background-color: var(--charcoal);
+      padding: 16px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      color: var(--white);
+      letter-spacing: 2px;
+      text-decoration: none;
+    }
+    .nav-links a {
+      color: #ccc;
+      text-decoration: none;
+      margin-left: 28px;
+      font-size: 13px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--blush); }
+
+    /* HERO */
+    .hero {
+      background-color: var(--charcoal);
+      color: var(--white);
+      text-align: center;
+      padding: 90px 40px 80px;
+    }
+    .hero-eyebrow {
+      font-size: 11px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--blush);
+      margin-bottom: 20px;
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 58px;
+      font-weight: 500;
+      line-height: 1.15;
+      margin-bottom: 20px;
+    }
+    .hero h1 em {
+      font-style: italic;
+      color: var(--blush);
+    }
+    .hero p {
+      font-size: 16px;
+      color: #aaa;
+      max-width: 480px;
+      margin: 0 auto 36px;
+      line-height: 1.7;
+      font-weight: 300;
+    }
+    .hero-btn {
+      display: inline-block;
+      background-color: var(--blush);
+      color: var(--charcoal);
+      padding: 14px 32px;
+      border-radius: 2px;
+      font-size: 13px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-decoration: none;
+      font-weight: 500;
+      transition: opacity 0.2s;
+    }
+    .hero-btn:hover { opacity: 0.85; }
+
+    /* INTRO STRIP */
+    .intro-strip {
+      background-color: var(--blush);
+      text-align: center;
+      padding: 20px 40px;
+      font-size: 13px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--mocha);
+      font-weight: 500;
+    }
+
+    /* SECTION */
+    .section {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 70px 24px;
+    }
+    .section-label {
+      font-size: 11px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--sage);
+      margin-bottom: 12px;
+    }
+    .section h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 34px;
+      font-weight: 500;
+      margin-bottom: 16px;
+      color: var(--charcoal);
+    }
+    .section > p {
+      font-size: 15px;
+      line-height: 1.8;
+      color: #555;
+      max-width: 620px;
+      font-weight: 300;
+    }
+
+    /* FORMULA CARD */
+    .formula-card {
+      background: var(--white);
+      border-left: 4px solid var(--blush);
+      border-radius: 4px;
+      padding: 32px 36px;
+      margin-top: 36px;
+      display: flex;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+    .formula-pieces { flex: 1; min-width: 200px; }
+    .formula-pieces h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      margin-bottom: 16px;
+      color: var(--charcoal);
+    }
+    .piece {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+      font-size: 14px;
+      color: #444;
+    }
+    .piece-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background-color: var(--blush);
+      flex-shrink: 0;
+    }
+    .formula-why { flex: 1; min-width: 200px; }
+    .formula-why h3 {
+      font-size: 12px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--sage);
+      margin-bottom: 14px;
+    }
+    .formula-why li {
+      list-style: none;
+      font-size: 14px;
+      color: #555;
+      margin-bottom: 10px;
+      padding-left: 16px;
+      position: relative;
+      line-height: 1.6;
+      font-weight: 300;
+    }
+    .formula-why li::before {
+      content: "—";
+      position: absolute;
+      left: 0;
+      color: var(--blush);
+    }
+
+    /* TIPS GRID */
+    .tips-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 24px;
+      margin-top: 40px;
+    }
+    .tip-card {
+      background: var(--white);
+      border-radius: 4px;
+      padding: 28px 24px;
+      border-top: 3px solid var(--sage);
+    }
+    .tip-number {
+      font-size: 11px;
+      letter-spacing: 3px;
+      color: var(--sage);
+      margin-bottom: 10px;
+    }
+    .tip-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      margin-bottom: 10px;
+      color: var(--charcoal);
+    }
+    .tip-card p {
+      font-size: 13px;
+      color: #777;
+      line-height: 1.7;
+      font-weight: 300;
+    }
+
+    /* CTA BAND */
+    .cta-band {
+      background-color: var(--mocha);
+      color: var(--white);
+      text-align: center;
+      padding: 60px 24px;
+    }
+    .cta-band h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 32px;
+      font-weight: 500;
+      margin-bottom: 14px;
+    }
+    .cta-band p {
+      font-size: 14px;
+      color: #ddd;
+      margin-bottom: 28px;
+      font-weight: 300;
+    }
+    .cta-band a {
+      display: inline-block;
+      background: var(--blush);
+      color: var(--charcoal);
+      padding: 13px 30px;
+      border-radius: 2px;
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    /* FOOTER */
+    footer {
+      background-color: var(--charcoal);
+      color: #aaa;
+      text-align: center;
+      padding: 32px 24px;
+      font-size: 13px;
+    }
+    footer a { color: var(--blush); text-decoration: none; }
+
+    .divider {
+      border: none;
+      border-top: 1px solid #e0d8d0;
+      margin: 0 auto;
+      max-width: 860px;
+    }
+  </style>
 </head>
 <body>
-    <!-- Google Tag Manager (noscript) -->
+
+<!-- Google Tag Manager (noscript) -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-ML3442VZ"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
 
-    <header>
-        <section>
-    <h1>Chic Edit</h1>
-    <p>Your destination for styling tips and outfit inspiration.</p>
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="index.html">CHIC EDIT</a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="tips.html">Style Tips</a>
+    <a href="outfits.html">Outfit Ideas</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <p class="hero-eyebrow">Fashion · Styling · Confidence</p>
+  <h1>Style that feels like <em>you</em>,<br/>every single day.</h1>
+  <p>Chic Edit helps you build a wardrobe with intention — outfit formulas, styling rules, and honest advice for real life.</p>
+  <a class="hero-btn" href="tips.html">Explore Style Tips</a>
 </section>
-    </header>
 
-    <main>
+<!-- STRIP -->
+<div class="intro-strip">Simple formulas · Timeless pieces · Effortless confidence</div>
 
-        <h2>White Shirt Outfit Formula</h2>
+<!-- FORMULA SECTION -->
+<div class="section">
+  <p class="section-label">This Week's Formula</p>
+  <h2>The White Shirt Edit</h2>
+  <p>A great outfit isn't about wearing more — it's about wearing the right things together. The white shirt formula is the foundation every wardrobe needs.</p>
 
-        <p>
-            White Shirt + Straight Jeans + Loafers = Timeless Style
-        </p>
+  <div class="formula-card">
+    <div class="formula-pieces">
+      <h3>The Formula</h3>
+      <div class="piece"><div class="piece-dot"></div> White Shirt — crisp, slightly oversized</div>
+      <div class="piece"><div class="piece-dot"></div> Straight Jeans — mid-rise, dark wash</div>
+      <div class="piece"><div class="piece-dot"></div> Loafers — leather or suede, any neutral</div>
+      <div class="piece"><div class="piece-dot"></div> Minimal bag — tote or structured shoulder</div>
+    </div>
+    <div class="formula-why">
+      <h3>Why It Works</h3>
+      <ul>
+        <li>White reflects light upward — instantly brightens your face</li>
+        <li>Straight cut balances all body types without trying</li>
+        <li>Loafers add polish without the effort of heels</li>
+        <li>Works for college, office, brunch, or travel</li>
+      </ul>
+    </div>
+  </div>
+</div>
 
-        <h3>Why It Works</h3>
+<hr class="divider"/>
 
-        <ul>
-            <li>Clean and versatile</li>
-            <li>Suitable for casual and smart-casual occasions</li>
-            <li>Easy to accessorize</li>
-        </ul>
+<!-- TIPS SECTION -->
+<div class="section">
+  <p class="section-label">Styling Principles</p>
+  <h2>The Rules We Live By</h2>
+  <p>Good style isn't expensive — it's intentional. These three principles will change how you get dressed.</p>
 
-        <button id="download-guide">
-            Download Style Guide
-        </button>
+  <div class="tips-grid">
+    <div class="tip-card">
+      <p class="tip-number">01</p>
+      <h3>Fit First, Always</h3>
+      <p>A ₹500 shirt that fits well looks better than a ₹5000 one that doesn't. Tailoring is the most underrated style tool.</p>
+    </div>
+    <div class="tip-card">
+      <p class="tip-number">02</p>
+      <h3>Neutrals as Base</h3>
+      <p>Build your wardrobe in beige, white, black, and navy. Add colour through accessories — scarves, bags, earrings.</p>
+    </div>
+    <div class="tip-card">
+      <p class="tip-number">03</p>
+      <h3>One Statement Piece</h3>
+      <p>Let one item do the talking — a bold earring, a printed bag, a coloured shoe. Keep everything else quiet.</p>
+    </div>
+  </div>
+</div>
 
-        <p>
-            <a href="#contact">Contact Us</a>
-        </p>
+<!-- CTA BAND -->
+<div class="cta-band">
+  <h2>Ready to dress with intention?</h2>
+  <p>Download our free Style Guide — outfit formulas for every occasion.</p>
+  <a href="tips.html">Get the Style Guide</a>
+</div>
 
-    </main>
-
-    <footer id="contact">
-        <h3>Contact</h3>
-        <p>Email: hello@chicedit.com</p>
-    </footer>
+<!-- FOOTER -->
+<footer>
+  <p>© 2025 Chic Edit · <a href="contact.html">hello@chicedit.com</a></p>
+</footer>
 
 </body>
 </html>
