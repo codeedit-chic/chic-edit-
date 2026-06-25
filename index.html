@@ -1,541 +1,452 @@
-import { useState, useEffect, useRef } from "react";
-
-const T = {
-  cream: "#f8f4ef",
-  blush: "#e8c9b8",
-  mocha: "#7a5c4e",
-  charcoal: "#2c2c2c",
-  sage: "#8a9e8c",
-  white: "#ffffff",
-  muted: "#888",
-  border: "#e8e2dc",
-};
-
-const GLOBAL_CSS = `
-  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500&display=swap');
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
-  body { font-family: 'Inter', sans-serif; background: #f8f4ef; color: #2c2c2c; overflow-x: hidden; }
-  a { text-decoration: none; color: inherit; }
-  button { cursor: pointer; font-family: 'Inter', sans-serif; }
-  input, textarea { font-family: 'Inter', sans-serif; }
-  @keyframes fadeUp   { from { opacity:0; transform:translateY(28px); } to { opacity:1; transform:translateY(0); } }
-  @keyframes fadeLeft { from { opacity:0; transform:translateX(-28px); } to { opacity:1; transform:translateX(0); } }
-  @keyframes blink    { 0%,80%,100%{opacity:0;} 40%{opacity:1;} }
-  .fade-up   { opacity:0; transform:translateY(28px); transition: opacity .65s ease, transform .65s ease; }
-  .fade-left { opacity:0; transform:translateX(-28px); transition: opacity .65s ease .25s, transform .65s ease .25s; }
-  .fade-up.visible, .fade-left.visible { opacity:1; transform:none; }
-  .dot { display:inline-block; animation: blink 1.2s infinite; }
-  .dot:nth-child(2) { animation-delay:.2s; }
-  .dot:nth-child(3) { animation-delay:.4s; }
-  @media (prefers-reduced-motion: reduce) {
-    .fade-up, .fade-left { opacity:1; transform:none; transition:none; }
-  }
-`;
-
-function useReveal() {
-  useEffect(() => {
-    const els = document.querySelectorAll(".fade-up, .fade-left");
-    const io = new IntersectionObserver(
-      (entries) => entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add("visible"); }),
-      { threshold: 0.15 }
-    );
-    els.forEach((el) => io.observe(el));
-    return () => io.disconnect();
-  });
+<!DOCTYPE html>
+<html lang="en">
+<<style>
+body {
+    font-family: Arial, sans-serif;
+    max-width: 900px;
+    margin: auto;
+    padding: 20px;
+    background-color: #f8f6f2;
 }
 
-const PAGES = ["Home", "About", "Style Tips", "Outfit Ideas", "Contact"];
-
-function Nav({ page, setPage }) {
-  const [scrolled, setScrolled] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
-
-  useEffect(() => {
-    const fn = () => setScrolled(window.scrollY > 40);
-    window.addEventListener("scroll", fn);
-    return () => window.removeEventListener("scroll", fn);
-  }, []);
-
-  return (
-    <nav style={{
-      position: "sticky", top: 0, zIndex: 100,
-      background: T.charcoal,
-      padding: "0 40px",
-      display: "flex", justifyContent: "space-between", alignItems: "center",
-      height: scrolled ? "56px" : "68px",
-      transition: "height .3s ease",
-      boxShadow: scrolled ? "0 2px 12px rgba(0,0,0,.18)" : "none",
-    }}>
-      <span
-        onClick={() => { setPage("Home"); setMenuOpen(false); }}
-        style={{ fontFamily: "'Playfair Display', serif", fontSize: 22, color: T.white, letterSpacing: 3, cursor: "pointer", userSelect: "none" }}
-      >
-        CHIC EDIT
-      </span>
-
-      <div style={{ display: "flex", gap: 32 }} className="desktop-nav">
-        {PAGES.map((p) => (
-          <span key={p} onClick={() => setPage(p)}
-            style={{
-              fontSize: 12, letterSpacing: 1.5, textTransform: "uppercase",
-              color: page === p ? T.blush : "#ccc",
-              cursor: "pointer",
-              borderBottom: page === p ? `1px solid ${T.blush}` : "1px solid transparent",
-              paddingBottom: 2, transition: "color .25s",
-            }}>
-            {p}
-          </span>
-        ))}
-      </div>
-
-      <button
-        onClick={() => setMenuOpen(!menuOpen)}
-        style={{ display: "none", background: "none", border: "none", color: T.white, fontSize: 22 }}
-        className="hamburger"
-        aria-label="Toggle menu"
-      >
-        {menuOpen ? "✕" : "☰"}
-      </button>
-
-      {menuOpen && (
-        <div style={{
-          position: "absolute", top: "100%", left: 0, right: 0,
-          background: T.charcoal, padding: "16px 24px",
-          display: "flex", flexDirection: "column", gap: 18,
-          borderTop: "1px solid rgba(255,255,255,.08)",
-        }}>
-          {PAGES.map((p) => (
-            <span key={p} onClick={() => { setPage(p); setMenuOpen(false); }}
-              style={{ fontSize: 13, letterSpacing: 1.5, textTransform: "uppercase", color: page === p ? T.blush : "#ccc", cursor: "pointer" }}>
-              {p}
-            </span>
-          ))}
-        </div>
-      )}
-
-      <style>{`
-        @media (max-width: 640px) {
-          .desktop-nav { display: none !important; }
-          .hamburger { display: block !important; }
-        }
-      `}</style>
-    </nav>
-  );
+h1 {
+    color: #2c2c2c;
+    text-align: center;
 }
 
-function Footer({ setPage }) {
-  return (
-    <footer style={{ background: T.charcoal, color: "#aaa", textAlign: "center", padding: "40px 24px", fontSize: 13 }}>
-      <p style={{ fontFamily: "'Playfair Display', serif", fontSize: 18, color: T.blush, marginBottom: 12 }}>CHIC EDIT</p>
-      <div style={{ display: "flex", justifyContent: "center", gap: 28, marginBottom: 20, flexWrap: "wrap" }}>
-        {PAGES.map((p) => (
-          <span key={p} onClick={() => setPage(p)}
-            style={{ fontSize: 11, letterSpacing: 1.5, textTransform: "uppercase", cursor: "pointer", color: "#aaa" }}
-            onMouseEnter={e => e.target.style.color = T.blush}
-            onMouseLeave={e => e.target.style.color = "#aaa"}>
-            {p}
-          </span>
-        ))}
-      </div>
-      <p>© 2025 Chic Edit · <a href="mailto:hello@chicedit.com" style={{ color: T.blush }}>hello@chicedit.com</a></p>
-    </footer>
-  );
+button {
+    background: black;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
 }
 
-const Label = ({ children }) => (
-  <p style={{ fontSize: 11, letterSpacing: 4, textTransform: "uppercase", color: T.sage, marginBottom: 12 }}>{children}</p>
-);
-
-function HomePage({ setPage }) {
-  useReveal();
-  return (
-    <div>
-      <div style={{
-        background: T.charcoal, minHeight: "92vh",
-        display: "flex", flexDirection: "column", justifyContent: "center",
-        padding: "80px 10%", position: "relative", overflow: "hidden",
-      }}>
-        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse at 70% 50%, rgba(232,201,184,.07) 0%, transparent 70%)", pointerEvents: "none" }} />
-        <Label><span style={{ color: T.blush }}>Welcome to</span></Label>
-        <h1 className="fade-up" style={{
-          fontFamily: "'Playfair Display', serif", fontSize: "clamp(42px, 7vw, 88px)",
-          fontWeight: 500, color: T.white, lineHeight: 1.1, maxWidth: 700, marginBottom: 28,
-        }}>
-          Dress with<br /><em style={{ color: T.blush }}>intention.</em>
-        </h1>
-        <p className="fade-up" style={{ color: "#bbb", fontSize: 16, lineHeight: 1.8, maxWidth: 500, marginBottom: 40, fontWeight: 300 }}>
-          No trends. No pressure. Just simple, timeless style that works for your real life — curated for you.
-        </p>
-        <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
-          <button onClick={() => setPage("Style Tips")}
-            style={{ background: T.blush, color: T.charcoal, border: "none", padding: "14px 32px", borderRadius: 4, fontSize: 13, letterSpacing: 1.5, textTransform: "uppercase", fontWeight: 500, transition: "transform .2s" }}
-            onMouseEnter={e => e.currentTarget.style.transform = "translateY(-2px)"}
-            onMouseLeave={e => e.currentTarget.style.transform = "translateY(0)"}>
-            Explore Style Tips
-          </button>
-          <button onClick={() => setPage("About")}
-            style={{ background: "transparent", color: T.white, border: "1px solid rgba(255,255,255,.3)", padding: "14px 32px", borderRadius: 4, fontSize: 13, letterSpacing: 1.5, textTransform: "uppercase", transition: "border-color .2s" }}
-            onMouseEnter={e => e.currentTarget.style.borderColor = T.blush}
-            onMouseLeave={e => e.currentTarget.style.borderColor = "rgba(255,255,255,.3)"}>
-            Our Story
-          </button>
-        </div>
-      </div>
-
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 0 }}>
-        {[
-          { icon: "✦", title: "Intentional Style", desc: "Every look is purposeful, never accidental." },
-          { icon: "◈", title: "Know Your Body",    desc: "Dress for who you are, not who trends say to be." },
-          { icon: "◎", title: "Timeless Picks",    desc: "Pieces that outlast every season." },
-          { icon: "❋", title: "Real Life Ready",   desc: "Style advice that actually fits your day." },
-        ].map((f, i) => (
-          <div key={i} className="fade-up"
-            style={{ padding: "48px 36px", background: i % 2 === 0 ? T.white : T.cream, borderRight: `1px solid ${T.border}`, transition: "background .25s" }}
-            onMouseEnter={e => e.currentTarget.style.background = "#f0e8e0"}
-            onMouseLeave={e => e.currentTarget.style.background = i % 2 === 0 ? T.white : T.cream}>
-            <div style={{ fontSize: 28, color: T.mocha, marginBottom: 14 }}>{f.icon}</div>
-            <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: 18, fontWeight: 500, marginBottom: 10 }}>{f.title}</h3>
-            <p style={{ fontSize: 14, color: T.muted, lineHeight: 1.7, fontWeight: 300 }}>{f.desc}</p>
-          </div>
-        ))}
-      </div>
-
-      <div className="fade-up" style={{ background: T.mocha, padding: "64px 10%", textAlign: "center" }}>
-        <p style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(22px, 4vw, 36px)", color: T.white, fontStyle: "italic", marginBottom: 28 }}>
-          "Style is not about being noticed.<br />It's about being remembered."
-        </p>
-        <button onClick={() => setPage("Outfit Ideas")}
-          style={{ background: "transparent", color: T.blush, border: `1px solid ${T.blush}`, padding: "12px 32px", borderRadius: 4, fontSize: 13, letterSpacing: 1.5, textTransform: "uppercase", transition: "all .2s" }}
-          onMouseEnter={e => { e.currentTarget.style.background = T.blush; e.currentTarget.style.color = T.charcoal; }}
-          onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = T.blush; }}>
-          See Outfit Ideas
-        </button>
-      </div>
-    </div>
-  );
+button:hover {
+    opacity: 0.8;
 }
+</style>>
+    <!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-ML3442VZ');</script>
+<!-- End Google Tag Manager -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chic Edit | Fashion Styling Tips</title>
+    <meta name="description" content="Chic Edit shares fashion styling tips, outfit formulas, and wardrobe inspiration.">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Chic Edit | Fashion Styling Tips</title>
 
-function AboutPage() {
-  useReveal();
-  return (
-    <div>
-      <div style={{ maxWidth: 860, margin: "0 auto", padding: "70px 40px" }}>
-        <Label>Our Story</Label>
-        <h2 className="fade-up" style={{ fontFamily: "'Playfair Display', serif", fontSize: 34, fontWeight: 500, marginBottom: 20 }}>About Chic Edit</h2>
-        <p className="fade-up" style={{ fontSize: 15, lineHeight: 1.8, color: "#555", fontWeight: 300, marginBottom: 16, maxWidth: 640 }}>
-          Chic Edit was created for people who want to look good without overthinking it. No fast fashion pressure, no complicated trends — just simple, intentional style that works for real life.
-        </p>
-        <p className="fade-up" style={{ fontSize: 15, lineHeight: 1.8, color: "#555", fontWeight: 300, marginBottom: 40, maxWidth: 640 }}>
-          We believe that great style comes from knowing yourself — your body, your lifestyle, your colours. Our goal is to give you the tools and formulas to dress with confidence every day.
-        </p>
-        <div className="fade-left" style={{ background: T.white, borderLeft: `4px solid ${T.blush}`, padding: "24px 28px", borderRadius: "0 4px 4px 0", fontFamily: "'Playfair Display', serif", fontSize: 20, fontStyle: "italic", color: T.mocha }}>
-          "Style is not about being noticed. It's about being remembered."
-        </div>
-      </div>
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-ML3442VZ');</script>
+  <!-- End Google Tag Manager -->
 
-      <div style={{ background: T.white, padding: "60px 40px" }}>
-        <div style={{ maxWidth: 860, margin: "0 auto" }}>
-          <Label>What we stand for</Label>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 24, marginTop: 32 }}>
-            {[
-              { icon: "✦", title: "Intentional", desc: "Every piece chosen with purpose. Quality over quantity, always." },
-              { icon: "◈", title: "Personal",    desc: "Style is not one-size-fits-all. We help you find what works for you." },
-              { icon: "◎", title: "Timeless",    desc: "We skip fast trends and focus on looks that last across seasons." },
-            ].map((p, i) => (
-              <div key={i} className="fade-up"
-                style={{ border: `1px solid ${T.border}`, borderRadius: 12, padding: "32px 24px", textAlign: "center", transition: "transform .25s, box-shadow .25s, border-color .25s" }}
-                onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-5px)"; e.currentTarget.style.boxShadow = "0 10px 28px rgba(122,92,78,.1)"; e.currentTarget.style.borderColor = T.blush; }}
-                onMouseLeave={e => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "none"; e.currentTarget.style.borderColor = T.border; }}>
-                <div style={{ fontSize: 26, color: T.mocha, marginBottom: 14 }}>{p.icon}</div>
-                <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: 17, fontWeight: 500, marginBottom: 10 }}>{p.title}</h3>
-                <p style={{ fontSize: 13, color: "#777", lineHeight: 1.65, fontWeight: 300 }}>{p.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-      <AIAssistant />
-    </div>
-  );
-}
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
 
-const TIPS = [
-  { tag: "Colour",  title: "Build around a neutral base",      body: "Start every wardrobe with at least three strong neutrals — white, camel, and charcoal. Everything else becomes an accent." },
-  { tag: "Fit",     title: "Fit is the real flex",              body: "A £20 dress that fits perfectly will always outlook a £200 dress that doesn't. Tailoring is the best style investment you can make." },
-  { tag: "Capsule", title: "The 10-item challenge",             body: "Pick 10 pieces that mix and match seamlessly. If they don't all work together, rethink the edit until they do." },
-  { tag: "Texture", title: "Layer textures, not just colours",  body: "Combine linen, denim, and silk in the same outfit. Texture contrast makes monochrome looks feel rich and dimensional." },
-  { tag: "Colour",  title: "Know your undertone",               body: "Warm undertones glow in camel, olive, terracotta. Cool undertones shine in navy, rose, and icy pastels. This one rule unlocks every colour decision." },
-  { tag: "Shoes",   title: "Shoes change the entire story",     body: "The same midi dress with white trainers reads casual. With kitten heels it becomes evening. Your shoes speak first." },
-];
-
-function StyleTipsPage() {
-  useReveal();
-  const [active, setActive] = useState("All");
-  const tags = ["All", ...Array.from(new Set(TIPS.map(t => t.tag)))];
-  const filtered = active === "All" ? TIPS : TIPS.filter(t => t.tag === active);
-
-  return (
-    <div style={{ maxWidth: 900, margin: "0 auto", padding: "70px 40px" }}>
-      <Label>Curated advice</Label>
-      <h2 className="fade-up" style={{ fontFamily: "'Playfair Display', serif", fontSize: 34, fontWeight: 500, marginBottom: 10 }}>Style Tips</h2>
-      <p className="fade-up" style={{ fontSize: 15, color: "#777", fontWeight: 300, marginBottom: 36, lineHeight: 1.7 }}>
-        Simple, actionable advice for dressing with confidence every day.
-      </p>
-      <div className="fade-up" style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 40 }}>
-        {tags.map(tag => (
-          <button key={tag} onClick={() => setActive(tag)}
-            style={{ border: `1px solid ${active === tag ? T.mocha : T.blush}`, background: active === tag ? T.mocha : T.cream, color: active === tag ? T.white : T.mocha, padding: "8px 20px", borderRadius: 20, fontSize: 12, letterSpacing: .5, transition: "all .2s" }}>
-            {tag}
-          </button>
-        ))}
-      </div>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 24 }}>
-        {filtered.map((tip) => (
-          <div key={tip.title} className="fade-up"
-            style={{ background: T.white, border: `1px solid ${T.border}`, borderRadius: 12, padding: "28px 26px", transition: "transform .25s, box-shadow .25s" }}
-            onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-4px)"; e.currentTarget.style.boxShadow = "0 8px 24px rgba(0,0,0,.07)"; }}
-            onMouseLeave={e => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "none"; }}>
-            <span style={{ fontSize: 10, letterSpacing: 2, textTransform: "uppercase", color: T.sage, background: `${T.sage}18`, padding: "4px 10px", borderRadius: 20 }}>{tip.tag}</span>
-            <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: 18, fontWeight: 500, margin: "14px 0 10px" }}>{tip.title}</h3>
-            <p style={{ fontSize: 14, color: "#666", lineHeight: 1.75, fontWeight: 300 }}>{tip.body}</p>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-const OUTFITS = [
-  { season: "All-year", title: "The Effortless Monday",  items: ["Straight-leg trousers", "Oversized white shirt", "Loafers", "Minimal gold earrings"],    vibe: "Quiet confidence" },
-  { season: "Summer",   title: "Linen & Light",           items: ["Wide-leg linen trousers", "Fitted tank", "Strappy sandals", "Raffia tote"],               vibe: "Coastal ease" },
-  { season: "Winter",   title: "Cosy Edit",               items: ["Camel coat", "Ribbed turtleneck", "Dark jeans", "Chelsea boots"],                         vibe: "Polished warmth" },
-  { season: "Evening",  title: "Understated Evening",     items: ["Satin slip skirt", "Fitted blazer", "Pointed-toe heels", "Clutch"],                       vibe: "Effortlessly dressed" },
-  { season: "Summer",   title: "Weekend Market Run",      items: ["Midi wrap dress", "White trainers", "Woven bag", "Oversized sunglasses"],                  vibe: "Easy Sunday" },
-  { season: "Winter",   title: "The Power Layer",         items: ["Wide-leg trousers", "Longline cardigan", "Simple cami underneath", "Block heel boots"],   vibe: "Structured softness" },
-];
-
-function OutfitIdeasPage() {
-  useReveal();
-  const [active, setActive] = useState("All");
-  const seasons = ["All", "All-year", "Summer", "Winter", "Evening"];
-  const filtered = active === "All" ? OUTFITS : OUTFITS.filter(o => o.season === active);
-
-  return (
-    <div style={{ maxWidth: 900, margin: "0 auto", padding: "70px 40px" }}>
-      <Label>Get dressed</Label>
-      <h2 className="fade-up" style={{ fontFamily: "'Playfair Display', serif", fontSize: 34, fontWeight: 500, marginBottom: 10 }}>Outfit Ideas</h2>
-      <p className="fade-up" style={{ fontSize: 15, color: "#777", fontWeight: 300, marginBottom: 36, lineHeight: 1.7 }}>
-        Complete looks you can pull together from pieces you probably already own.
-      </p>
-      <div className="fade-up" style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 40 }}>
-        {seasons.map(s => (
-          <button key={s} onClick={() => setActive(s)}
-            style={{ border: `1px solid ${active === s ? T.mocha : T.blush}`, background: active === s ? T.mocha : T.cream, color: active === s ? T.white : T.mocha, padding: "8px 20px", borderRadius: 20, fontSize: 12, transition: "all .2s" }}>
-            {s}
-          </button>
-        ))}
-      </div>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 24 }}>
-        {filtered.map((o) => (
-          <div key={o.title} className="fade-up"
-            style={{ background: T.white, border: `1px solid ${T.border}`, borderRadius: 12, overflow: "hidden", transition: "transform .25s, box-shadow .25s" }}
-            onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-4px)"; e.currentTarget.style.boxShadow = "0 8px 24px rgba(0,0,0,.07)"; }}
-            onMouseLeave={e => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "none"; }}>
-            <div style={{ height: 6, background: `linear-gradient(90deg, ${T.blush}, ${T.mocha})` }} />
-            <div style={{ padding: "26px 24px" }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 14 }}>
-                <span style={{ fontSize: 10, letterSpacing: 2, textTransform: "uppercase", color: T.sage }}>{o.season}</span>
-                <span style={{ fontSize: 11, fontStyle: "italic", color: T.mocha }}>{o.vibe}</span>
-              </div>
-              <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: 18, fontWeight: 500, marginBottom: 16 }}>{o.title}</h3>
-              <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: 8 }}>
-                {o.items.map(item => (
-                  <li key={item} style={{ fontSize: 13, color: "#666", fontWeight: 300, display: "flex", alignItems: "center", gap: 10 }}>
-                    <span style={{ width: 5, height: 5, borderRadius: "50%", background: T.blush, flexShrink: 0 }} />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function ContactPage() {
-  useReveal();
-  const [form, setForm] = useState({ name: "", email: "", message: "" });
-  const [sent, setSent] = useState(false);
-
-  const inputStyle = {
-    width: "100%", border: `1px solid ${T.border}`, borderRadius: 8,
-    padding: "12px 16px", fontSize: 14, background: T.white, outline: "none",
-    transition: "border-color .2s", marginBottom: 16,
-  };
-
-  return (
-    <div style={{ maxWidth: 660, margin: "0 auto", padding: "70px 40px" }}>
-      <Label>Get in touch</Label>
-      <h2 className="fade-up" style={{ fontFamily: "'Playfair Display', serif", fontSize: 34, fontWeight: 500, marginBottom: 10 }}>Contact</h2>
-      <p className="fade-up" style={{ fontSize: 15, color: "#777", fontWeight: 300, marginBottom: 40, lineHeight: 1.7 }}>
-        Have a question, collaboration idea, or just want to say hello? We'd love to hear from you.
-      </p>
-      {sent ? (
-        <div className="fade-up" style={{ background: T.white, border: `1px solid ${T.blush}`, borderRadius: 12, padding: "48px 40px", textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 16 }}>✦</div>
-          <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: 22, fontWeight: 500, marginBottom: 10 }}>Message received</h3>
-          <p style={{ fontSize: 14, color: "#777", fontWeight: 300 }}>Thank you, {form.name}. We'll be in touch soon.</p>
-        </div>
-      ) : (
-        <form className="fade-up" onSubmit={e => { e.preventDefault(); if (form.name && form.email && form.message) setSent(true); }}>
-          <label style={{ fontSize: 11, letterSpacing: 2, textTransform: "uppercase", color: T.sage, display: "block", marginBottom: 6 }}>Name</label>
-          <input style={inputStyle} placeholder="Your name" value={form.name}
-            onChange={e => setForm({ ...form, name: e.target.value })}
-            onFocus={e => e.target.style.borderColor = T.blush}
-            onBlur={e => e.target.style.borderColor = T.border} />
-
-          <label style={{ fontSize: 11, letterSpacing: 2, textTransform: "uppercase", color: T.sage, display: "block", marginBottom: 6 }}>Email</label>
-          <input style={inputStyle} type="email" placeholder="your@email.com" value={form.email}
-            onChange={e => setForm({ ...form, email: e.target.value })}
-            onFocus={e => e.target.style.borderColor = T.blush}
-            onBlur={e => e.target.style.borderColor = T.border} />
-
-          <label style={{ fontSize: 11, letterSpacing: 2, textTransform: "uppercase", color: T.sage, display: "block", marginBottom: 6 }}>Message</label>
-          <textarea style={{ ...inputStyle, height: 140, resize: "vertical" }} placeholder="What's on your mind?"
-            value={form.message} onChange={e => setForm({ ...form, message: e.target.value })}
-            onFocus={e => e.target.style.borderColor = T.blush}
-            onBlur={e => e.target.style.borderColor = T.border} />
-
-          <button type="submit"
-            style={{ background: T.charcoal, color: T.white, border: "none", padding: "14px 36px", borderRadius: 8, fontSize: 13, letterSpacing: 1.5, textTransform: "uppercase", width: "100%", transition: "background .2s" }}
-            onMouseEnter={e => e.currentTarget.style.background = T.mocha}
-            onMouseLeave={e => e.currentTarget.style.background = T.charcoal}>
-            Send Message
-          </button>
-        </form>
-      )}
-      <div className="fade-up" style={{ marginTop: 48, display: "flex", gap: 32, flexWrap: "wrap" }}>
-        {[{ label: "Email", value: "hello@chicedit.com" }, { label: "Instagram", value: "@chicedit" }].map(i => (
-          <div key={i.label}>
-            <p style={{ fontSize: 11, letterSpacing: 2, textTransform: "uppercase", color: T.sage, marginBottom: 4 }}>{i.label}</p>
-            <p style={{ fontSize: 14, color: T.mocha }}>{i.value}</p>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-const CHIPS = [
-  "What colours suit warm skin tones?",
-  "How to build a capsule wardrobe?",
-  "Tips for dressing for my body type?",
-  "How to mix patterns confidently?",
-];
-
-function AIAssistant() {
-  const [query, setQuery] = useState("");
-  const [response, setResponse] = useState("");
-  const [loading, setLoading] = useState(false);
-
-  const ask = async (q) => {
-    const question = q || query.trim();
-    if (!question) return;
-    setLoading(true);
-    setResponse("");
-    try {
-      const res = await fetch("https://api.anthropic.com/v1/messages", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          model: "claude-sonnet-4-6",
-          max_tokens: 1000,
-          system: "You are the Chic Edit style assistant — warm, knowledgeable, and practical. Give specific, actionable style advice in 2–4 short paragraphs. No bullet lists. Conversational tone. No fast fashion pressure.",
-          messages: [{ role: "user", content: question }],
-        }),
-      });
-      const data = await res.json();
-      setResponse(data.content?.[0]?.text || "Something went wrong. Please try again.");
-    } catch {
-      setResponse("Something went wrong. Please try again.");
+  <style>
+    :root {
+      --cream:    #f8f4ef;
+      --blush:    #e8c9b8;
+      --mocha:    #7a5c4e;
+      --charcoal: #2c2c2c;
+      --sage:     #8a9e8c;
+      --white:    #ffffff;
     }
-    setLoading(false);
-  };
 
-  return (
-    <div style={{ background: T.cream, padding: "60px 40px" }}>
-      <div style={{ maxWidth: 860, margin: "0 auto", background: T.white, borderRadius: 16, border: `1px solid ${T.border}`, padding: "48px 40px" }}>
-        <Label>Style Assistant</Label>
-        <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 26, fontWeight: 500, marginBottom: 8 }}>Ask Chic Edit anything</h2>
-        <p style={{ fontSize: 14, color: T.muted, fontWeight: 300, marginBottom: 28, lineHeight: 1.7 }}>
-          Personalised style advice powered by AI — wardrobe tips, outfit formulas, colour guidance and more.
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--cream);
+      color: var(--charcoal);
+    }
+
+    /* NAV */
+    nav {
+      background-color: var(--charcoal);
+      padding: 16px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      color: var(--white);
+      letter-spacing: 2px;
+      text-decoration: none;
+    }
+    .nav-links a {
+      color: #ccc;
+      text-decoration: none;
+      margin-left: 28px;
+      font-size: 13px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--blush); }
+
+    /* HERO */
+    .hero {
+      background-color: var(--charcoal);
+      color: var(--white);
+      text-align: center;
+      padding: 90px 40px 80px;
+    }
+    .hero-eyebrow {
+      font-size: 11px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--blush);
+      margin-bottom: 20px;
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 58px;
+      font-weight: 500;
+      line-height: 1.15;
+      margin-bottom: 20px;
+    }
+    .hero h1 em {
+      font-style: italic;
+      color: var(--blush);
+    }
+    .hero p {
+      font-size: 16px;
+      color: #aaa;
+      max-width: 480px;
+      margin: 0 auto 36px;
+      line-height: 1.7;
+      font-weight: 300;
+    }
+    .hero-btn {
+      display: inline-block;
+      background-color: var(--blush);
+      color: var(--charcoal);
+      padding: 14px 32px;
+      border-radius: 2px;
+      font-size: 13px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-decoration: none;
+      font-weight: 500;
+      transition: opacity 0.2s;
+    }
+    .hero-btn:hover { opacity: 0.85; }
+
+    /* INTRO STRIP */
+    .intro-strip {
+      background-color: var(--blush);
+      text-align: center;
+      padding: 20px 40px;
+      font-size: 13px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--mocha);
+      font-weight: 500;
+    }
+
+    /* SECTION */
+    .section {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 70px 24px;
+    }
+    .section-label {
+      font-size: 11px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--sage);
+      margin-bottom: 12px;
+    }
+    .section h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 34px;
+      font-weight: 500;
+      margin-bottom: 16px;
+      color: var(--charcoal);
+    }
+    .section > p {
+      font-size: 15px;
+      line-height: 1.8;
+      color: #555;
+      max-width: 620px;
+      font-weight: 300;
+    }
+
+    /* FORMULA CARD */
+    .formula-card {
+      background: var(--white);
+      border-left: 4px solid var(--blush);
+      border-radius: 4px;
+      padding: 32px 36px;
+      margin-top: 36px;
+      display: flex;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+    .formula-pieces { flex: 1; min-width: 200px; }
+    .formula-pieces h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      margin-bottom: 16px;
+      color: var(--charcoal);
+    }
+    .piece {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+      font-size: 14px;
+      color: #444;
+    }
+    .piece-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background-color: var(--blush);
+      flex-shrink: 0;
+    }
+    .formula-why { flex: 1; min-width: 200px; }
+    .formula-why h3 {
+      font-size: 12px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--sage);
+      margin-bottom: 14px;
+    }
+    .formula-why li {
+      list-style: none;
+      font-size: 14px;
+      color: #555;
+      margin-bottom: 10px;
+      padding-left: 16px;
+      position: relative;
+      line-height: 1.6;
+      font-weight: 300;
+    }
+    .formula-why li::before {
+      content: "—";
+      position: absolute;
+      left: 0;
+      color: var(--blush);
+    }
+
+    /* TIPS GRID */
+    .tips-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 24px;
+      margin-top: 40px;
+    }
+    .tip-card {
+      background: var(--white);
+      border-radius: 4px;
+      padding: 28px 24px;
+      border-top: 3px solid var(--sage);
+    }
+    .tip-number {
+      font-size: 11px;
+      letter-spacing: 3px;
+      color: var(--sage);
+      margin-bottom: 10px;
+    }
+    .tip-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      margin-bottom: 10px;
+      color: var(--charcoal);
+    }
+    .tip-card p {
+      font-size: 13px;
+      color: #777;
+      line-height: 1.7;
+      font-weight: 300;
+    }
+
+    /* CTA BAND */
+    .cta-band {
+      background-color: var(--mocha);
+      color: var(--white);
+      text-align: center;
+      padding: 60px 24px;
+    }
+    .cta-band h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 32px;
+      font-weight: 500;
+      margin-bottom: 14px;
+    }
+    .cta-band p {
+      font-size: 14px;
+      color: #ddd;
+      margin-bottom: 28px;
+      font-weight: 300;
+    }
+    .cta-band a {
+      display: inline-block;
+      background: var(--blush);
+      color: var(--charcoal);
+      padding: 13px 30px;
+      border-radius: 2px;
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    /* FOOTER */
+    footer {
+      background-color: var(--charcoal);
+      color: #aaa;
+      text-align: center;
+      padding: 32px 24px;
+      font-size: 13px;
+    }
+    footer a { color: var(--blush); text-decoration: none; }
+
+    .divider {
+      border: none;
+      border-top: 1px solid #e0d8d0;
+      margin: 0 auto;
+      max-width: 860px;
+    }
+  </style>
+</head>
+<body>
+    <!-- Google Tag Manager (noscript) -->
+
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-ML3442VZ"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+    <header>
+        <section>
+    <h1>Chic Edit</h1>
+    <p>Your destination for styling tips and outfit inspiration.</p>
+</section>
+    </header>
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="index.html">CHIC EDIT</a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="tips.html">Style Tips</a>
+    <a href="outfits.html">Outfit Ideas</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+  </div>
+</nav>
+
+    <main>
+<!-- HERO -->
+<section class="hero">
+  <p class="hero-eyebrow">Fashion · Styling · Confidence</p>
+  <h1>Style that feels like <em>you</em>,<br/>every single day.</h1>
+  <p>Chic Edit helps you build a wardrobe with intention — outfit formulas, styling rules, and honest advice for real life.</p>
+  <a class="hero-btn" href="tips.html">Explore Style Tips</a>
+</section>
+
+        <h2>White Shirt Outfit Formula</h2>
+<!-- STRIP -->
+<div class="intro-strip">Simple formulas · Timeless pieces · Effortless confidence</div>
+
+        <p>
+            White Shirt + Straight Jeans + Loafers = Timeless Style
         </p>
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginBottom: 22 }}>
-          {CHIPS.map(chip => (
-            <button key={chip} onClick={() => { setQuery(chip); ask(chip); }}
-              style={{ border: `1px solid ${T.blush}`, background: T.cream, color: T.mocha, fontSize: 12, padding: "8px 18px", borderRadius: 20, transition: "background .2s" }}
-              onMouseEnter={e => e.currentTarget.style.background = T.blush}
-              onMouseLeave={e => e.currentTarget.style.background = T.cream}>
-              {chip}
-            </button>
-          ))}
-        </div>
-        <div style={{ display: "flex", gap: 10, marginBottom: 20 }}>
-          <input value={query} onChange={e => setQuery(e.target.value)}
-            onKeyDown={e => e.key === "Enter" && ask()}
-            placeholder="Ask about your style, outfits, wardrobe..."
-            style={{ flex: 1, border: `1px solid ${T.border}`, borderRadius: 8, padding: "12px 16px", fontSize: 14, background: "#faf8f5", outline: "none" }}
-            onFocus={e => e.target.style.borderColor = T.blush}
-            onBlur={e => e.target.style.borderColor = T.border} />
-          <button onClick={() => ask()}
-            style={{ background: T.charcoal, color: T.white, border: "none", borderRadius: 8, padding: "12px 26px", fontSize: 13, transition: "background .2s" }}
-            onMouseEnter={e => e.currentTarget.style.background = T.mocha}
-            onMouseLeave={e => e.currentTarget.style.background = T.charcoal}>
-            Ask ↗
-          </button>
-        </div>
-        {loading && (
-          <div style={{ background: T.cream, borderLeft: `3px solid ${T.blush}`, borderRadius: 8, padding: "20px 22px", fontSize: 14, color: "#666" }}>
-            Thinking<span className="dot">.</span><span className="dot">.</span><span className="dot">.</span>
-          </div>
-        )}
-        {response && !loading && (
-          <div style={{ background: T.cream, borderLeft: `3px solid ${T.blush}`, borderRadius: 8, padding: "20px 22px", fontSize: 14, lineHeight: 1.8, color: "#444" }}
-            dangerouslySetInnerHTML={{ __html: response.replace(/\n\n/g, "<br/><br/>") }} />
-        )}
-      </div>
+<!-- FORMULA SECTION -->
+<div class="section">
+  <p class="section-label">This Week's Formula</p>
+  <h2>The White Shirt Edit</h2>
+  <p>A great outfit isn't about wearing more — it's about wearing the right things together. The white shirt formula is the foundation every wardrobe needs.</p>
+
+        <h3>Why It Works</h3>
+  <div class="formula-card">
+    <div class="formula-pieces">
+      <h3>The Formula</h3>
+      <div class="piece"><div class="piece-dot"></div> White Shirt — crisp, slightly oversized</div>
+      <div class="piece"><div class="piece-dot"></div> Straight Jeans — mid-rise, dark wash</div>
+      <div class="piece"><div class="piece-dot"></div> Loafers — leather or suede, any neutral</div>
+      <div class="piece"><div class="piece-dot"></div> Minimal bag — tote or structured shoulder</div>
     </div>
-  );
-}
-
-export default function App() {
-  const [page, setPage] = useState("Home");
-
-  useEffect(() => {
-    const style = document.createElement("style");
-    style.textContent = GLOBAL_CSS;
-    document.head.appendChild(style);
-    return () => document.head.removeChild(style);
-  }, []);
-
-  useEffect(() => { window.scrollTo({ top: 0, behavior: "smooth" }); }, [page]);
-
-  const renderPage = () => {
-    if (page === "Home")         return <HomePage setPage={setPage} />;
-    if (page === "About")        return <AboutPage />;
-    if (page === "Style Tips")   return <StyleTipsPage />;
-    if (page === "Outfit Ideas") return <OutfitIdeasPage />;
-    if (page === "Contact")      return <ContactPage />;
-  };
-
-  return (
-    <div>
-      <Nav page={page} setPage={setPage} />
-      <main>{renderPage()}</main>
-      <Footer setPage={setPage} />
+    <div class="formula-why">
+      <h3>Why It Works</h3>
+      <ul>
+        <li>White reflects light upward — instantly brightens your face</li>
+        <li>Straight cut balances all body types without trying</li>
+        <li>Loafers add polish without the effort of heels</li>
+        <li>Works for college, office, brunch, or travel</li>
+      </ul>
     </div>
-  );
-}
+  </div>
+</div>
+
+        <ul>
+            <li>Clean and versatile</li>
+            <li>Suitable for casual and smart-casual occasions</li>
+            <li>Easy to accessorize</li>
+        </ul>
+<hr class="divider"/>
+
+        <button id="download-guide">
+            Download Style Guide
+        </button>
+<!-- TIPS SECTION -->
+<div class="section">
+  <p class="section-label">Styling Principles</p>
+  <h2>The Rules We Live By</h2>
+  <p>Good style isn't expensive — it's intentional. These three principles will change how you get dressed.</p>
+
+        <p>
+            <a href="#contact">Contact Us</a>
+        </p>
+  <div class="tips-grid">
+    <div class="tip-card">
+      <p class="tip-number">01</p>
+      <h3>Fit First, Always</h3>
+      <p>A ₹500 shirt that fits well looks better than a ₹5000 one that doesn't. Tailoring is the most underrated style tool.</p>
+    </div>
+    <div class="tip-card">
+      <p class="tip-number">02</p>
+      <h3>Neutrals as Base</h3>
+      <p>Build your wardrobe in beige, white, black, and navy. Add colour through accessories — scarves, bags, earrings.</p>
+    </div>
+    <div class="tip-card">
+      <p class="tip-number">03</p>
+      <h3>One Statement Piece</h3>
+      <p>Let one item do the talking — a bold earring, a printed bag, a coloured shoe. Keep everything else quiet.</p>
+    </div>
+  </div>
+</div>
+
+    </main>
+<!-- CTA BAND -->
+<div class="cta-band">
+  <h2>Ready to dress with intention?</h2>
+  <p>Download our free Style Guide — outfit formulas for every occasion.</p>
+  <a href="tips.html">Get the Style Guide</a>
+</div>
+
+    <footer id="contact">
+        <h3>Contact</h3>
+        <p>Email: hello@chicedit.com</p>
+    </footer>
+<!-- FOOTER -->
+<footer>
+  <p>© 2025 Chic Edit · <a href="contact.html">hello@chicedit.com</a></p>
+</footer>
+
+</body>
+</html>
