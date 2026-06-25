@@ -6,23 +6,143 @@
   <title>About | Chic Edit</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
   <style>
-    :root { --cream:#f8f4ef; --blush:#e8c9b8; --mocha:#7a5c4e; --charcoal:#2c2c2c; --sage:#8a9e8c; --white:#ffffff; }
-    * { box-sizing:border-box; margin:0; padding:0; }
-    body { font-family:'Inter',sans-serif; background-color:var(--cream); color:var(--charcoal); }
-    nav { background-color:var(--charcoal); padding:16px 40px; display:flex; justify-content:space-between; align-items:center; }
-    .nav-logo { font-family:'Playfair Display',serif; font-size:22px; color:var(--white); letter-spacing:2px; text-decoration:none; }
-    .nav-links a { color:#ccc; text-decoration:none; margin-left:28px; font-size:13px; letter-spacing:1px; text-transform:uppercase; }
-    .nav-links a:hover { color:var(--blush); }
-    .section { max-width:860px; margin:0 auto; padding:70px 24px; }
-    .section-label { font-size:11px; letter-spacing:4px; text-transform:uppercase; color:var(--sage); margin-bottom:12px; }
-    .section h2 { font-family:'Playfair Display',serif; font-size:34px; font-weight:500; margin-bottom:20px; }
-    .section p { font-size:15px; line-height:1.8; color:#555; font-weight:300; margin-bottom:16px; max-width:640px; }
-    .highlight { background:var(--white); border-left:4px solid var(--blush); padding:24px 28px; border-radius:4px; margin-top:32px; font-family:'Playfair Display',serif; font-size:20px; font-style:italic; color:var(--mocha); }
-    footer { background-color:var(--charcoal); color:#aaa; text-align:center; padding:32px 24px; font-size:13px; }
-    footer a { color:var(--blush); text-decoration:none; }
+    :root {
+      --cream: #f8f4ef;
+      --blush: #e8c9b8;
+      --mocha: #7a5c4e;
+      --charcoal: #2c2c2c;
+      --sage: #8a9e8c;
+      --white: #ffffff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', sans-serif; background-color: var(--cream); color: var(--charcoal); overflow-x: hidden; }
+
+    /* ── NAV ── */
+    nav { background-color: var(--charcoal); padding: 16px 40px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+    .nav-logo { font-family: 'Playfair Display', serif; font-size: 22px; color: var(--white); letter-spacing: 2px; text-decoration: none; }
+    .nav-links a { color: #ccc; text-decoration: none; margin-left: 28px; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; transition: color .3s; }
+    .nav-links a:hover { color: var(--blush); }
+
+    /* ── SCROLL ANIMATION BASE ── */
+    .anim { opacity: 0; transform: translateY(24px); transition: opacity .65s ease, transform .65s ease; }
+    .anim.visible { opacity: 1; transform: translateY(0); }
+    .anim-left { opacity: 0; transform: translateX(-24px); transition: opacity .65s ease .3s, transform .65s ease .3s; }
+    .anim-left.visible { opacity: 1; transform: translateX(0); }
+
+    /* ── HERO SECTION ── */
+    .hero { max-width: 860px; margin: 0 auto; padding: 70px 40px 50px; }
+    .section-label { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: var(--sage); margin-bottom: 12px; }
+    .hero h2 { font-family: 'Playfair Display', serif; font-size: 34px; font-weight: 500; margin-bottom: 20px; }
+    .body-text { font-size: 15px; line-height: 1.8; color: #555; font-weight: 300; margin-bottom: 16px; max-width: 640px; }
+    .highlight {
+      background: var(--white);
+      border-left: 4px solid var(--blush);
+      padding: 24px 28px;
+      border-radius: 4px;
+      margin-top: 32px;
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      font-style: italic;
+      color: var(--mocha);
+    }
+
+    /* ── PILLARS ── */
+    .pillars-section { max-width: 860px; margin: 10px auto 60px; padding: 0 40px; }
+    .pillars-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .pillar {
+      background: var(--white);
+      border: 1px solid #e8e2dc;
+      border-radius: 12px;
+      padding: 32px 24px;
+      text-align: center;
+      transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+      cursor: default;
+    }
+    .pillar:hover { transform: translateY(-5px); box-shadow: 0 10px 28px rgba(122,92,78,.1); border-color: var(--blush); }
+    .pillar-icon { font-size: 26px; margin-bottom: 14px; color: var(--mocha); }
+    .pillar h3 { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 500; margin-bottom: 10px; }
+    .pillar p { font-size: 13px; color: #777; line-height: 1.65; font-weight: 300; }
+
+    /* ── AI ASSISTANT ── */
+    .ai-section {
+      max-width: 860px;
+      margin: 0 auto 70px;
+      padding: 48px 40px;
+      background: var(--white);
+      border-radius: 16px;
+      border: 1px solid #ede8e2;
+    }
+    .ai-label { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--sage); margin-bottom: 10px; }
+    .ai-title { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 500; margin-bottom: 8px; }
+    .ai-sub { font-size: 14px; color: #888; font-weight: 300; margin-bottom: 26px; line-height: 1.6; }
+    .chip-row { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 22px; }
+    .chip {
+      border: 1px solid var(--blush);
+      background: var(--cream);
+      color: var(--mocha);
+      font-size: 12px;
+      padding: 8px 18px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      transition: background .2s, color .2s;
+    }
+    .chip:hover { background: var(--blush); color: var(--charcoal); }
+    .ai-input-row { display: flex; gap: 10px; margin-bottom: 20px; }
+    #ai-input {
+      flex: 1;
+      border: 1px solid #d8d0c8;
+      border-radius: 8px;
+      padding: 11px 16px;
+      font-size: 14px;
+      font-family: 'Inter', sans-serif;
+      background: #faf8f5;
+      outline: none;
+      transition: border-color .2s;
+    }
+    #ai-input:focus { border-color: var(--blush); }
+    #ai-btn {
+      background: var(--charcoal);
+      color: var(--white);
+      border: none;
+      border-radius: 8px;
+      padding: 11px 26px;
+      font-size: 13px;
+      letter-spacing: .5px;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      transition: background .2s;
+    }
+    #ai-btn:hover { background: var(--mocha); }
+    #ai-response {
+      display: none;
+      background: var(--cream);
+      border-left: 3px solid var(--blush);
+      border-radius: 8px;
+      padding: 20px 22px;
+      font-size: 14px;
+      line-height: 1.8;
+      color: #444;
+    }
+    .loading-dots span { animation: blink 1.2s infinite; }
+    .loading-dots span:nth-child(2) { animation-delay: .2s; }
+    .loading-dots span:nth-child(3) { animation-delay: .4s; }
+    @keyframes blink { 0%,80%,100%{opacity:0;} 40%{opacity:1;} }
+
+    /* ── FOOTER ── */
+    footer { background-color: var(--charcoal); color: #aaa; text-align: center; padding: 32px 24px; font-size: 13px; }
+    footer a { color: var(--blush); text-decoration: none; }
+
+    /* ── MOBILE ── */
+    @media (max-width: 640px) {
+      .hero, .pillars-section, .ai-section { padding-left: 20px; padding-right: 20px; }
+      .pillars-grid { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+    }
   </style>
 </head>
 <body>
+
 <nav>
   <a class="nav-logo" href="index.html">CHIC EDIT</a>
   <div class="nav-links">
@@ -33,15 +153,104 @@
     <a href="contact.html">Contact</a>
   </div>
 </nav>
-<div class="section">
-  <p class="section-label">Our Story</p>
-  <h2>About Chic Edit</h2>
-  <p>Chic Edit was created for people who want to look good without overthinking it. No fast fashion pressure, no complicated trends — just simple, intentional style that works for real life.</p>
-  <p>We believe that great style comes from knowing yourself — your body, your lifestyle, your colours. Our goal is to give you the tools and formulas to dress with confidence every day.</p>
-  <div class="highlight">"Style is not about being noticed. It's about being remembered."</div>
+
+<!-- HERO -->
+<div class="hero">
+  <p class="section-label anim">Our Story</p>
+  <h2 class="anim" style="transition-delay:.1s">About Chic Edit</h2>
+  <p class="body-text anim" style="transition-delay:.18s">Chic Edit was created for people who want to look good without overthinking it. No fast fashion pressure, no complicated trends — just simple, intentional style that works for real life.</p>
+  <p class="body-text anim" style="transition-delay:.26s">We believe that great style comes from knowing yourself — your body, your lifestyle, your colours. Our goal is to give you the tools and formulas to dress with confidence every day.</p>
+  <div class="highlight anim-left">"Style is not about being noticed. It's about being remembered."</div>
 </div>
+
+<!-- VALUE PILLARS -->
+<div class="pillars-section">
+  <div class="pillars-grid">
+    <div class="pillar anim" style="transition-delay:.1s">
+      <div class="pillar-icon">✦</div>
+      <h3>Intentional</h3>
+      <p>Every piece is chosen with purpose. We believe in quality over quantity, always.</p>
+    </div>
+    <div class="pillar anim" style="transition-delay:.22s">
+      <div class="pillar-icon">◈</div>
+      <h3>Personal</h3>
+      <p>Style is not one-size-fits-all. We help you find what truly works for you.</p>
+    </div>
+    <div class="pillar anim" style="transition-delay:.34s">
+      <div class="pillar-icon">◎</div>
+      <h3>Timeless</h3>
+      <p>We skip the noise of fast trends and focus on looks that last across seasons.</p>
+    </div>
+  </div>
+</div>
+
+<!-- AI STYLE ASSISTANT -->
+<div class="ai-section anim">
+  <p class="ai-label">Style Assistant</p>
+  <p class="ai-title">Ask Chic Edit anything</p>
+  <p class="ai-sub">Get personalised style advice powered by AI — wardrobe tips, outfit formulas, colour guidance, and more.</p>
+  <div class="chip-row">
+    <button class="chip" onclick="askChip(this)">What colours suit warm skin tones?</button>
+    <button class="chip" onclick="askChip(this)">How to build a capsule wardrobe?</button>
+    <button class="chip" onclick="askChip(this)">Tips for dressing for my body type?</button>
+    <button class="chip" onclick="askChip(this)">How to mix patterns confidently?</button>
+  </div>
+  <div class="ai-input-row">
+    <input id="ai-input" type="text" placeholder="Ask about your style, outfits, wardrobe..." />
+    <button id="ai-btn" onclick="askAI()">Ask ↗</button>
+  </div>
+  <div id="ai-response"></div>
+</div>
+
 <footer>
   <p>© 2025 Chic Edit · <a href="contact.html">hello@chicedit.com</a></p>
 </footer>
+
+<script>
+  // Scroll reveal
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.anim, .anim-left').forEach(el => observer.observe(el));
+
+  // Quick-chip click
+  function askChip(btn) {
+    document.getElementById('ai-input').value = btn.textContent;
+    askAI();
+  }
+
+  // AI call
+  async function askAI() {
+    const input = document.getElementById('ai-input');
+    const responseDiv = document.getElementById('ai-response');
+    const question = input.value.trim();
+    if (!question) return;
+
+    responseDiv.style.display = 'block';
+    responseDiv.innerHTML = 'Thinking<span class="loading-dots"><span>.</span><span>.</span><span>.</span></span>';
+
+    try {
+      const res = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-6',
+          max_tokens: 1000,
+          system: `You are the Chic Edit style assistant — a warm, knowledgeable fashion advisor who helps people dress with confidence and intention. You give practical, specific style advice. You avoid fast fashion pressure. Keep answers concise, friendly, and actionable — 2 to 4 short paragraphs max. No bullet lists, just flowing conversational advice.`,
+          messages: [{ role: 'user', content: question }]
+        })
+      });
+      const data = await res.json();
+      const text = data.content?.[0]?.text || 'Something went wrong. Please try again.';
+      responseDiv.innerHTML = text.replace(/\n\n/g, '<br><br>');
+    } catch (e) {
+      responseDiv.innerHTML = 'Hmm, something went wrong. Please try again in a moment.';
+    }
+  }
+
+  document.getElementById('ai-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') askAI();
+  });
+</script>
 </body>
 </html>
